@@ -15,7 +15,9 @@ Build a functional expense tracker while learning Spring Boot concepts hands-on 
 | 3     | Apache Kafka                               | Event streaming (expense events, budget alerts) |
 | 4     | Spring Security                            | Authentication & authorization                  |
 | 5     | PostgreSQL                                 | Production-grade database                       |
-| 6+    | Redis, Scheduling, Reporting               | Caching, automated summaries                    |
+| 6     | React (Frontend)                           | UI for managing expenses                        |
+| 7     | Python, FastAPI, LangChain                 | AI chatbot for natural language expense mgmt    |
+| 8+    | Redis, Scheduling, Reporting               | Caching, automated summaries                    |
 
 ## Domain Model
 
@@ -117,6 +119,7 @@ Keep controller thin: request in -> service call -> response out.
 #### 3) Endpoint checklist
 
 For each endpoint, confirm:
+
 - mapping annotation is correct (`@PostMapping`, `@GetMapping`, etc.)
 - request body/path variable annotations are present
 - expected status code is returned:
@@ -128,6 +131,7 @@ For each endpoint, confirm:
 #### 4) Practice flow (hands-on learning loop)
 
 For each endpoint:
+
 1. Write method signature in controller.
 2. Call a service method that does not exist yet.
 3. Implement that service method.
@@ -177,7 +181,86 @@ Learn: Authentication, authorization, JWT tokens, securing endpoints, user-speci
 
 Learn: Database migration (Flyway or Liquibase), Spring profiles for dev vs prod datasources, connection pooling (HikariCP).
 
-### Phase 6+ — Advanced Features
+### Phase 6 — React Frontend
+
+Learn: React fundamentals, component-based UI, `fetch`/`axios` for API calls, React Router, state management. Build a single-page app that talks to the Spring Boot REST API.
+
+#### Pages
+
+- Dashboard — overview of spending with totals by category
+- Expense List — table of all expenses with filtering by category and date range
+- Add/Edit Expense — form to create or update an expense
+
+#### Tech
+
+- React 18+ with functional components and hooks
+- Vite for project scaffolding and dev server
+- Axios or fetch for HTTP calls to `http://localhost:8080/api/expenses`
+- Spring Boot will need CORS configuration to allow requests from the React dev server (typically `http://localhost:5173`)
+
+#### Project Structure
+
+```
+expense-tracker-ui/        (separate project, sibling to expense-tracker/)
+├── package.json
+├── src/
+│   ├── App.jsx
+│   ├── components/
+│   │   ├── ExpenseList.jsx
+│   │   ├── ExpenseForm.jsx
+│   │   └── Dashboard.jsx
+│   └── services/
+│       └── expenseApi.js  (API call functions)
+└── index.html
+```
+
+### Phase 7 — AI Chatbot (Python Microservice)
+
+Learn: Python, FastAPI, LangChain, LLM function calling, microservice communication.
+
+Build a separate Python service that lets users manage expenses through natural language conversation.
+
+#### Architecture
+
+```
+React chat UI → Python chatbot service (FastAPI) → Spring Boot REST API → Database
+```
+
+#### Tech Stack
+
+- **FastAPI** — Python web framework for the chatbot API (`/chat` endpoint)
+- **LangChain** — LLM orchestration framework (prompt management, tool/function calling, conversation memory)
+- **OpenAI Python SDK** or **Ollama** — LLM provider (Ollama for free local inference)
+- **httpx** — HTTP client for calling Spring Boot REST APIs from Python
+
+#### Project Structure
+
+```
+expense-tracker-chatbot/
+├── requirements.txt
+├── main.py              (FastAPI app)
+├── chat/
+│   ├── agent.py         (LangChain agent with tools)
+│   └── tools.py         (tool definitions that call Spring Boot APIs)
+└── config.py            (API URLs, LLM settings)
+```
+
+#### How It Works
+
+1. User sends a chat message (e.g., "I spent $30 on lunch today")
+2. FastAPI receives the message, passes it to LangChain agent
+3. LangChain + LLM decides which tool to call (create_expense, get_expenses, get_total, etc.)
+4. The tool makes an HTTP request to the Spring Boot REST API
+5. LangChain formats the LLM response and returns it to the user
+
+#### Capabilities
+
+- Create expenses via natural language ("Spent $45 on groceries yesterday")
+- Query spending ("How much did I spend on food this month?")
+- List and filter expenses ("Show me all transport expenses from last week")
+- Conversation memory for follow-up questions ("What about entertainment?")
+
+### Phase 8+ — Advanced Features
 
 - Redis caching for summaries (`@Cacheable`)
 - `@Scheduled` monthly reports

@@ -10,9 +10,11 @@ import java.time.LocalDateTime;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
+
     public ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
     }
+
     public Expense createExpense(Expense expense) {
         expense.setCreatedAt(LocalDateTime.now());
         expense.setUpdatedAt(LocalDateTime.now());

@@ -9,16 +9,18 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import com.example.expense_tracker.model.Expense;
-import com.example.expense_tracker.service.ExpenseService;  
+import com.example.expense_tracker.service.ExpenseService;
 
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
+
     public ExpenseController(ExpenseService expenseService) {
         this.expenseService = expenseService;
     }
-    //(Next phase) switch from entity input to DTO input.
+
+    // (Next phase) switch from entity input to DTO input.
     @PostMapping
     public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
         Expense savedExpense = expenseService.createExpense(expense);
