@@ -83,6 +83,84 @@ expense-tracker/
 
 Learn: `@RestController`, `@Service`, `@Repository`, `@Entity`, Spring Data JPA, H2 console, `application.yml` configuration.
 
+### Phase 1 Controller Implementation Guide (Do It Yourself)
+
+Goal: implement `ExpenseController` yourself and understand the responsibility split between Controller, Service, and Repository.
+
+#### 1) What the controller should and should not do
+
+- Should:
+  - expose REST endpoints (`/api/expenses`)
+  - validate incoming request payloads (`@Valid`)
+  - convert HTTP inputs (path/query/body) into service calls
+  - return proper HTTP status codes
+- Should not:
+  - contain database queries
+  - contain complex business rules
+  - directly use JPA in controller methods
+
+Keep controller thin: request in -> service call -> response out.
+
+#### 2) Build order (recommended)
+
+1. Create `ExpenseController` with `@RestController` and `@RequestMapping("/api/expenses")`.
+2. Inject `ExpenseService` through constructor injection.
+3. Add one endpoint at a time in this order:
+   - `POST /api/expenses`
+   - `GET /api/expenses`
+   - `GET /api/expenses/{id}`
+   - `PUT /api/expenses/{id}`
+   - `DELETE /api/expenses/{id}`
+4. Use `@Valid` on request DTO input and return DTOs (not entity objects directly).
+5. Verify each endpoint using Postman or curl before moving to the next one.
+
+#### 3) Endpoint checklist
+
+For each endpoint, confirm:
+- mapping annotation is correct (`@PostMapping`, `@GetMapping`, etc.)
+- request body/path variable annotations are present
+- expected status code is returned:
+  - create -> `201 Created`
+  - fetch/list/update -> `200 OK`
+  - delete -> `204 No Content`
+- error path is covered (invalid input, ID not found)
+
+#### 4) Practice flow (hands-on learning loop)
+
+For each endpoint:
+1. Write method signature in controller.
+2. Call a service method that does not exist yet.
+3. Implement that service method.
+4. Run app and test endpoint.
+5. Refactor naming/response structure if needed.
+
+This loop helps you learn by creating small compile-time and runtime feedback cycles.
+
+#### 5) Testing strategy while learning
+
+- Start with manual API testing (Postman/curl) to understand request/response behavior.
+- Then add `MockMvc` tests for controller:
+  - one success test per endpoint
+  - one validation failure test
+  - one resource-not-found test
+
+#### 6) Suggested resources
+
+- Spring REST Controllers (official guide): https://spring.io/guides/gs/rest-service/
+- Building a RESTful Web Service with Spring Boot: https://spring.io/guides/tutorials/rest/
+- Spring Web annotations reference (`@RestController`, `@RequestMapping`, etc.): https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller.html
+- Validation in Spring (`@Valid`, Bean Validation): https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html
+- ResponseEntity usage (status + body control): https://www.baeldung.com/spring-response-entity
+- MockMvc testing reference: https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html
+
+#### 7) Definition of done for your controller
+
+- All 5 CRUD endpoints are implemented and manually tested.
+- Validation errors return meaningful messages.
+- Not-found IDs return correct error status.
+- Controller has no repository usage (service-only dependency).
+- Basic controller tests pass.
+
 ### Phase 2 — Validation & Error Handling
 
 Learn: Bean Validation (`@Valid`, `@NotNull`, `@DecimalMin`), `@RestControllerAdvice`, custom exceptions, proper HTTP status codes.
