@@ -2,6 +2,17 @@
 
 A personal expense tracking application built incrementally as a Spring Boot learning project.
 
+
+## Urgent Next Do
+
+These are immediate next actions (not long-term milestones):
+
+1. Add a steering document for low-token, high-signal prompting.
+2. Add Postman collection/environment for quick API testing.
+3. Practice Java Streams API and useful collections in service layer logic.
+4. Start Kafka integration spike for expense event publishing.
+
+
 ## Goal
 
 Build a functional expense tracker while learning Spring Boot concepts hands-on — starting simple and layering in technologies like Kafka, security, caching, etc. over time.
@@ -148,6 +159,22 @@ This loop helps you learn by creating small compile-time and runtime feedback cy
   - one validation failure test
   - one resource-not-found test
 
+##### Quick curl test (current implemented endpoint)
+
+Use this for the currently implemented `POST /api/expenses` endpoint:
+
+```bash
+curl -i -X POST "http://localhost:8080/api/expenses" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Lunch",
+    "amount": 12.50,
+    "category": "FOOD",
+    "expenseDate": "2026-04-27",
+    "notes": "Team lunch"
+  }'
+```
+
 #### 6) Suggested resources
 
 - Spring REST Controllers (official guide): https://spring.io/guides/gs/rest-service/
@@ -266,3 +293,5 @@ expense-tracker-chatbot/
 - `@Scheduled` monthly reports
 - Pagination & sorting
 - Docker Compose for local dev environment
+
+
