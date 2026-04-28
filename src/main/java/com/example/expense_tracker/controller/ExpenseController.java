@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import com.example.expense_tracker.model.Expense;
 import com.example.expense_tracker.service.ExpenseService;
@@ -29,6 +30,12 @@ public class ExpenseController {
     public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
         Expense savedExpense = expenseService.createExpense(expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
+    }   
+
+    @GetMapping
+    public ResponseEntity<List<Expense>> getAllExpenses() {
+        List<Expense> expenses = expenseService.getAllExpenses();
+        return ResponseEntity.ok(expenses);
     }
 
     @GetMapping
