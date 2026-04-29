@@ -3,7 +3,6 @@ package com.example.expense_tracker.controller;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClient.ResponseSpec;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,15 +32,9 @@ public class ExpenseController {
     }   
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses() {
+    public ResponseEntity<List<Expense>> getAllExpense() {
         List<Expense> expenses = expenseService.getAllExpenses();
         return ResponseEntity.ok(expenses);
-    }
-
-    @GetMapping
-    public ResponseEntity<Expense> getAllExpense() {
-        Expense getAllExpense = expenseService.getAllExpenses(expense);
-        return ResponseEntity.ok();
     }
 
     @PatchMapping("/{id}")
