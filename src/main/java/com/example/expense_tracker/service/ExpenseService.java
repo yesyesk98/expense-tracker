@@ -14,22 +14,22 @@ import java.util.Optional;
 @Service
 public class ExpenseService {
     private final ExpenseRepository expenseRepository;
-
     public ExpenseService(ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
     }
-
     public Expense createExpense(Expense expense) {
         expense.setCreatedAt(LocalDateTime.now());
         expense.setUpdatedAt(LocalDateTime.now());
         return expenseRepository.save(expense);
     }
-
     public List<Expense> getAllExpenses() {
-
         return expenseRepository.findAll();
     }
-
+    public Expense getExpenseById(Long id) {
+        //Lambda expression to throw an exception if the expense is not found
+        return expenseRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found with id: " + id));
+    }
     public Expense updateExpensePartially(Long id, Expense expense) {
         Optional<Expense> existing = expenseRepository.findById(id);
         // Great learning to implement lambda here
@@ -46,6 +46,23 @@ public class ExpenseService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found with id: " + id);
             //Your custom exception; only useful if you have a global handler (@ControllerAdvice) mapping it to 404.
             //throw new ResourceNotFoundException("Expense not found with id: " + id);
+        }
+    }
+    public void deleteExpense(Long id) {
+        expenseRepository.deleteById(id);
+    }   
+    public Expense updateExpense(Long id, Expense expense) {
+        Optional<Expense> existing = expenseRepository.findById(id);
+        if (existing.isPresent()) {
+            existing.get().setDescription(expense.getDescription());
+            existing.get().setAmount(expense.getAmount());
+            existing.get().setCategory(expense.getCategory());
+            existing.get().setExpenseDate(expense.getExpenseDate());
+            existing.get().setNotes(expense.getNotes());
+            existing.get().setUpdatedAt(LocalDateTime.now());
+            return expenseRepository.save(existing.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found with id: " + id);
         }
     }
 

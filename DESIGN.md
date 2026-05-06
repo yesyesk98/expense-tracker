@@ -52,7 +52,14 @@ Build a functional expense tracker while learning Spring Boot concepts hands-on 
 | GET    | `/api/expenses`      | List all expenses |
 | GET    | `/api/expenses/{id}` | Get expense by ID |
 | PUT    | `/api/expenses/{id}` | Update an expense |
+| PATCH  | `/api/expenses/{id}` | Partially update an expense |
 | DELETE | `/api/expenses/{id}` | Delete an expense |
+
+### Pagination (for Expense List APIs)
+
+| Method | Endpoint                                              | Description                               |
+| ------ | ----------------------------------------------------- | ----------------------------------------- |
+| GET    | `/api/expenses?page=0&size=20&sort=expenseDate,desc` | List expenses with pagination and sorting |
 
 ### Filtering & Aggregation
 
@@ -194,7 +201,7 @@ curl -i -X POST "http://localhost:8080/api/expenses" \
 
 ### Phase 2 — Validation & Error Handling
 
-Learn: Bean Validation (`@Valid`, `@NotNull`, `@DecimalMin`), `@RestControllerAdvice`, custom exceptions, proper HTTP status codes.
+Learn: Bean Validation (`@Valid`, `@NotNull`, `@DecimalMin`), `@RestControllerAdvice`, custom exceptions, proper HTTP status codes, and paginated list APIs with `Pageable`.
 
 ### Phase 3 — Kafka Integration
 
@@ -291,7 +298,6 @@ expense-tracker-chatbot/
 
 - Redis caching for summaries (`@Cacheable`)
 - `@Scheduled` monthly reports
-- Pagination & sorting
 - Docker Compose for local dev environment
 
 

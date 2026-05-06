@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
@@ -30,16 +32,30 @@ public class ExpenseController {
         Expense savedExpense = expenseService.createExpense(expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
     }   
-
     @GetMapping
     public ResponseEntity<List<Expense>> getAllExpense() {
         List<Expense> expenses = expenseService.getAllExpenses();
         return ResponseEntity.ok(expenses);
     }
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
+        Expense expense = expenseService.getExpenseById(id);
+        return ResponseEntity.ok(expense);
+    }
     @PatchMapping("/{id}")
     public ResponseEntity<Expense> updateExpensePartially(@PathVariable Long id, @RequestBody Expense expense) {
         Expense updatedExpense = expenseService.updateExpensePartially(id, expense);
         return ResponseEntity.ok(updatedExpense);
+    }
+    //PUT AND DELETE ENDPOINTS
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense expense) {
+        Expense updatedExpense = expenseService.updateExpense(id, expense);
+        return ResponseEntity.ok(updatedExpense);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
     }
 }
